@@ -124,7 +124,7 @@ class Noeuds_systeme :
         self.diminuer_capacite(nouvelle_donnee.get_taille()) #on réduit la taille de la capacité disponible
         
     
-    def supprimer_donnee(self, donnee:int)->None:
+    def supprimer_donnee(self, donnee:Donnees)->None:
         self.liste_donnees_locales.remove(donnee)
 
     def toString(self)->str:
@@ -218,7 +218,7 @@ vtt=Donnees(id=1, taille=5)
 route=Donnees(id=2, taille=4)
 chat=Donnees(id=3, taille=30)
 chien=Donnees(id=4, taille=15)
-soleil=Donnees(id=5, taille=10)
+soleil=Donnees(id=5, taille=35)
 pluie=Donnees(id=6, taille=10)
 vent=Donnees(id=7, taille=10)
 
@@ -231,24 +231,20 @@ vent=Donnees(id=7, taille=10)
 #noeuds avec des listes de données vides
 noeud_1=Noeuds_systeme(1, 10, [], [])
 noeud_2=Noeuds_systeme( 2, 50, [], [noeud_1])
-noeud_3=Noeuds_systeme(3, 40, [], [noeud_2])
-#noeud_1.ajouter_noeud_accessible(noeud_1)
-noeud_1.ajouter_noeud_accessible(noeud_2) # le noeud 1 a accès à son propre noeud et au noeud 2
-#noeud_2.ajouter_noeud_accessible(noeud_2)
-noeud_2.ajouter_noeud_accessible(noeud_3) # le noeud 2 a accès au noeud 1, son propre noeud et le noeud 3.
-#noeud_3.ajouter_noeud_accessible(noeud_3) 
-noeud_4=Noeuds_systeme(4, 22, [], [noeud_3])
-noeud_3.ajouter_noeud_accessible(noeud_4) # le noeud 3 a accès à son propre noeud, au noeud 2 et au noeud 4
-#noeud_4.ajouter_noeud_accessible(noeud_4)
-noeud_5=Noeuds_systeme(5, 99, [], [noeud_4])
-noeud_4.ajouter_noeud_accessible(noeud_5) # le noeud 4 a accès à son propre noeud,  au noeud 3 et au noeud 5
-#noeud_5.ajouter_noeud_accessible(noeud_5) # le noeud 5 a accès à son propre noeud et au noeud 4
-
+noeud_3=Noeuds_systeme(3, 30, [], [noeud_2])
+noeud_1.ajouter_noeud_accessible(noeud_2) # le noeud 1 a accès et au noeud 2
+noeud_2.ajouter_noeud_accessible(noeud_3) # le noeud 2 a accès au noeud 1 et le noeud 3.
+noeud_4=Noeuds_systeme(4, 42, [], [noeud_3])
+noeud_3.ajouter_noeud_accessible(noeud_4) # le noeud 3 a accès au noeud 2 et au noeud 4
+noeud_5=Noeuds_systeme(5, 38, [], [noeud_4]) 
+noeud_4.ajouter_noeud_accessible(noeud_5) # le noeud 4 a accès au noeud 3 et au noeud 5
+noeud_6=Noeuds_systeme(6, 20, [], [noeud_5])
+noeud_5.ajouter_noeud_accessible(noeud_6) # le noeud 5 a accès au noeud 4 et au noeud 6
 
 # test placement de données
 gillian=Utilisateurs(1, [vtt, route, pluie, vent], noeud_1)
 #emma=Utilisateurs(2, [chat, chien, soleil], noeud_2)
-emma=Utilisateurs(2, [chat, chien, soleil], noeud_5)
+emma=Utilisateurs(2, [chat, chien, soleil], noeud_6)
 
 # test placement de données avec intéret commun
 gillian.ajouter_donnee_interet(soleil)
