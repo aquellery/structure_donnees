@@ -80,7 +80,7 @@ class Noeuds_systeme :
             if id_donnee not in Donnees.liste_id : 
                 raise ValueError("L'identifiant "+str(id_donnee)+" ne correspond  pas à un identifiant de données")
             
-            #on calcule ensuite la capacité utilisée par toutes les données comprises dans le noeud
+            # on calcule ensuite la capacité utilisée par toutes les données comprises dans le noeud
             # on récupère la Donnée associée à l'identifiant qu'on a 
             capacite_utilisee+=Donnees.get_taille_par_id(id_donnee)
         #si en ajoutant toutes les données de la liste on a encore de la place dans le noeud, alors on peut ajouter la liste de données au noeud.
@@ -232,17 +232,17 @@ vent=Donnees(id=7, taille=10)
 noeud_1=Noeuds_systeme(1, 10, [], [])
 noeud_2=Noeuds_systeme( 2, 50, [], [noeud_1])
 noeud_3=Noeuds_systeme(3, 40, [], [noeud_2])
-noeud_1.ajouter_noeud_accessible(noeud_1)
+#noeud_1.ajouter_noeud_accessible(noeud_1)
 noeud_1.ajouter_noeud_accessible(noeud_2) # le noeud 1 a accès à son propre noeud et au noeud 2
-noeud_2.ajouter_noeud_accessible(noeud_2)
+#noeud_2.ajouter_noeud_accessible(noeud_2)
 noeud_2.ajouter_noeud_accessible(noeud_3) # le noeud 2 a accès au noeud 1, son propre noeud et le noeud 3.
-noeud_3.ajouter_noeud_accessible(noeud_3) 
+#noeud_3.ajouter_noeud_accessible(noeud_3) 
 noeud_4=Noeuds_systeme(4, 22, [], [noeud_3])
 noeud_3.ajouter_noeud_accessible(noeud_4) # le noeud 3 a accès à son propre noeud, au noeud 2 et au noeud 4
-noeud_4.ajouter_noeud_accessible(noeud_4)
+#noeud_4.ajouter_noeud_accessible(noeud_4)
 noeud_5=Noeuds_systeme(5, 99, [], [noeud_4])
 noeud_4.ajouter_noeud_accessible(noeud_5) # le noeud 4 a accès à son propre noeud,  au noeud 3 et au noeud 5
-noeud_5.ajouter_noeud_accessible(noeud_5) # le noeud 5 a accès à son propre noeud et au noeud 4
+#noeud_5.ajouter_noeud_accessible(noeud_5) # le noeud 5 a accès à son propre noeud et au noeud 4
 
 
 # test placement de données

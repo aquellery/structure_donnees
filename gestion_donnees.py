@@ -66,7 +66,10 @@ def test_2():
 
     print("Données du noeud 1 : "+ noeud_1.toStringDonnees())
     print("Données du noeud 2 : "+ noeud_2.toStringDonnees())
-    print("Données du noeud 3 : "+noeud_3.toStringDonnees())
+    print("Données du noeud 3 : "+ noeud_3.toStringDonnees())
+    print("Données du noeud 4 : "+ noeud_4.toStringDonnees())
+    print("Données du noeud 5 : "+ noeud_5.toStringDonnees())
+
 #test_2()
 
 # 3e partie : implémentation de la méthode pour savoir où placer les données lorsque plusieurs utilisateurs sont intéressés par la même donnée
@@ -130,36 +133,52 @@ def placement_donnees_multi(liste_donnees:list[Donnees], liste_utilisateurs:list
         print("Le chemin n'est pas minimal pour les deux utilisateurs, il faut déplacer la donnée commune dans un autre noeud")
 
         #### RESTE A FAIRE ####
-    print("Revoir chemin le plus court avec de la récursion")
 
 
+def chemin_le_plus_court(noeud_commun:Noeuds_systeme, utilisateur:Utilisateurs)->list[Noeuds_systeme]:
+    """Fonction recursif qui permet de trouver le chemin le plus court entre un noeud et un utilisateur"""
 
-def chemin_le_plus_court(noeud_commun:Noeuds_systeme, utilisateur:Utilisateurs) ->list[Noeuds_systeme]:
-    """ Fonction qui permet de calculer le chemin le plus court entre un noeud et un utilisateur """
-    liste_noeuds=[]
     noeud_direct=utilisateur.get_noeud_direct()
-    if noeud_commun==noeud_direct :
-        print("Le noeud est le noeud direct de l'utilisateur.")
-        liste_noeuds.append(noeud_direct) 
-    elif noeud_commun in noeud_direct.get_liste_noeuds_accessibles():
-        print("Le noeud est voisin à celui direct de l'utilisateur : un seul noeud sépart l'utilisateur du noeud recherché.")
-        print("id noeud direct : ", noeud_direct.get_id())
-        print("id noeud commun : ", noeud_commun.get_id())
-        liste_noeuds.append(noeud_direct)
-        liste_noeuds.append(noeud_commun)
-    else :
-        for noeud in noeud_direct.get_liste_noeuds_accessibles():
-            if noeud_commun in noeud.get_liste_noeuds_accessibles():
-                liste_noeuds.append(noeud_direct)
-                liste_noeuds.append(noeud)
-                liste_noeuds.append(noeud_commun)
-                print("coucou")
-            print("Le noeud est séparer par deux autres noeuds de l'utilisateur")
-            print("id noeud direct : ", noeud_direct.get_id())
-            print("id noeud : ", noeud.get_id())
-            print("id noeud commun : ", noeud_commun.get_id())           
-    return liste_noeuds
 
+    def chemin_entre_deux_noeuds(noeud_visite:Noeuds_systeme,  noeud_commun:Noeuds_systeme, chemins_possibles:list[Noeuds_systeme], liste_visite:list[Noeuds_systeme], chemin)->list[Noeuds_systeme]:
+        liste_visite.append(noeud_visite)
+        #print("nombre de noeuds visités : ", len(liste_visite))
+        #print("noeud visite :", noeud_visite.get_id())
+        if noeud_visite.get_id()==noeud_commun.get_id():
+            #print("On a les memes noeuds")
+            chemin=[noeud_visite]
+            chemins_possibles.append(chemin)
+            return chemins_possibles
+        if noeud_commun in noeud_visite.get_liste_noeuds_accessibles():
+            #print("Le noeud commun est voisin au noeud visité")
+            if noeud_visite not in chemin : # à partir d'une récurrence il est déjà dedans 
+                chemin.append(noeud_visite)
+            chemins_possibles.append(chemin)
+            #print("chemin de ", len(chemin), " noeuds trouvé")
+            #print(type(chemins_possibles)) 
+            return chemins_possibles
+        for noeud_voisin in noeud_visite.get_liste_noeuds_accessibles():
+            if noeud_visite not in chemin : # à partir d'une récurrence il est déjà dedans 
+                chemin.append(noeud_visite)
+            #print("le noeud commun n'est pas voisin au noeud visité")
+            if noeud_voisin not in liste_visite : # on regarde qu'on l'a pas déjà vu
+                #print("noeud voisin : ", noeud_voisin.get_id())
+                nouveau_chemin=chemin
+                if noeud_voisin not in chemin :
+                    nouveau_chemin.append(noeud_voisin)
+                chemins_possibles=chemin_entre_deux_noeuds(noeud_voisin, noeud_commun, chemins_possibles, liste_visite, nouveau_chemin)
+        return chemins_possibles
+        
+    chemins_possibles=chemin_entre_deux_noeuds(noeud_direct, noeud_commun, [], [], [])
+    #print('chemins : ',len(chemins_possibles))
+    if not chemins_possibles :
+        raise ValueError("Il n'y a pas de chemin possible")
+    if len(chemins_possibles)!=0:
+        chemin_final=min(chemins_possibles, key=len)
+        liste_id=[noeud.get_id() for noeud in chemin_final]
+        print("Le chemin entre le noeud direct", noeud_direct.get_id(), " et le noeud commun ", noeud_commun.get_id(), " est en passant par les noeuds", liste_id)
+        return chemin_final
+        
 
 def test_3():
     liste_donnees=[vtt, route, chat, chien, soleil, pluie, vent]
