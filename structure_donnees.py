@@ -46,7 +46,6 @@ class Donnees :
     def toString(self):
         return f"La donnée qui a pour id : {self.id}  est de taille : {self.taille}"
     
-
 class Noeuds_systeme :
     """
     La classe Noeuds_systeme permet d'obtenir la structure d'un noeud avec :
@@ -210,6 +209,14 @@ class Utilisateurs :
         return f"Les données d'intéret de l'utilisateur {self.id} sont la liste d'id : {liste_id_donnees}"
 
 
+def toStringDonneesNoeuds(liste_noeuds:list[Noeuds_systeme])-> str :
+    """Fonction qui permet de renvoyer la liste des données présentes dans chaque noeuds de la liste passée en paramètre"""
+    res=""
+    for noeud in liste_noeuds :
+        ligne=noeud.toStringDonnees()
+        res+=ligne+'\n'
+    return res
+
 ####################################################################################
 ####################################################################################
 
@@ -260,3 +267,8 @@ print("Noeud sport : "+ noeud_1.toString())
 print("Noeud animaux : "+ noeud_2.toString())
 print("Utilisateur gillian : "+gillian.toString())
 print("Utilisateur emma : "+ emma.toString())
+
+### listes utiles pour la gestion des données ###
+liste_donnees=[vtt, route, chat, chien, soleil, pluie, vent]
+liste_utilisateurs=[gillian, emma]
+liste_noeuds=[noeud_1, noeud_2, noeud_3, noeud_4, noeud_5, noeud_6 ]
