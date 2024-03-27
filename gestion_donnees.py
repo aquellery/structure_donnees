@@ -4,8 +4,11 @@
 ## Stockage de données personnelles
 
 # 2e partie : implémentation de la méthode pour savoir où placer les données
+# 4e partie : faite en même temps : on a pas une seule donnée par noeud
 
+# on récupère tout ce qui a été fait dans structure_donnees : les classes et les objets créés
 from structure_donnees import *
+
 
 def placement_donnees(liste_donnees:list[Donnees], liste_utilisateurs:list[Utilisateurs]):
     """
@@ -56,6 +59,11 @@ def test_2():
 
 #test_2()
 
+###########################################################################
+###########################################################################
+###########################################################################
+###########################################################################
+    
 # 3e partie : implémentation de la méthode pour savoir où placer les données lorsque plusieurs utilisateurs sont intéressés par la même donnée
 
 def placement_donnees_multi(liste_donnees:list[Donnees], liste_utilisateurs:list[Utilisateurs]):
@@ -120,11 +128,12 @@ def placement_donnees_multi(liste_donnees:list[Donnees], liste_utilisateurs:list
     print("\nCalcul de la distance entre le noeud commun et le 2e utilisateur :")
     chemin_2=chemin_le_plus_court(noeud_commun, utilisateur2)
 
-    if abs(len(chemin_1)-len(chemin_2))<=1: # on regarde si la distance qui sépare le noeud commun des deux utilisateurs est égale à un noeud prêt :
+    chemin_minimiser=abs(len(chemin_1)-len(chemin_2))<=1
+    if chemin_minimiser: # on regarde si la distance qui sépare le noeud commun des deux utilisateurs est égale à un noeud prêt :
         print("\nLe temps d'accès au noeud commun est minimal pour les deux utilisateurs")
     else : # si c'est pas le cas, il va falloir déplacer la donnée dans un autre noeud
         print("Le chemin n'est pas minimal pour les deux utilisateurs, il faut déplacer la donnée commune dans un autre noeud")
-        # on regarde quel utilisateur est le plus éloigné de la donnée :
+        # on regarde quel utilisateur est le plus éloigné de la donnée et quel chemin est le plus long :
         if len(chemin_1)<len(chemin_2):
             utilisateur_pret=utilisateur1
             utilisateur_loin=utilisateur2
@@ -136,7 +145,8 @@ def placement_donnees_multi(liste_donnees:list[Donnees], liste_utilisateurs:list
             chemin_court=chemin_2
             chemin_long=chemin_1
         # on calcul quel noeud est placé au milieu des deux utilisateurs
-        noeud_milieu:Noeuds_systeme=noeud_au_milieu(utilisateur_pret, utilisateur_loin)
+        noeuds_milieu=noeud_au_milieu(utilisateur_pret, utilisateur_loin)
+        noeud_milieu=noeuds_milieu[0]
 
         # on enlève la donnée de son noeud
         if donnee_commune in noeud_commun.get_liste_donnees() :
@@ -145,26 +155,42 @@ def placement_donnees_multi(liste_donnees:list[Donnees], liste_utilisateurs:list
         # on essaie de placer la donnée commune au milieu des deux :
         print("\nPlacement de la donnée commune au point le plus stratégique")
         donnee_placee=placement_donnee(donnee_commune, noeud_milieu)
+        print("taille milieux : ", len(noeuds_milieu))
+        if len(noeuds_milieu)>1 and not donnee_placee: # si la donnée n'a pas pu être placée, on regarde si un deuxième noeud est considéré voisin (dans le cas d'une liste paire)
+            print("deucième essai")
+            donnee_placee=placement_donnee(donnee_commune, noeuds_milieu[1])
         i=0
-        while not donnee_placee or  len(chemin_court)>len(chemin_long) or i<len(chemin_court):
+        print("donnée placée : ", donnee_placee)
+        print('taille du chemin court : ', len(chemin_court))
+        print('taille du chemin long : ', len(chemin_long))
+
+        while (not donnee_placee) and (not chemin_minimiser) and len(chemin_court)<len(chemin_long) and  i<len(chemin_court):
             i+=1 # pour ne pas rentrer dans une boucle infernale, si après avoir parcouru tous les noeuds on ne peut pas déplacer la donnée alors on la laisse à sa place
             # si on ne peut pas, on essaie de la rapprocher de l'utilisateur qui en était le plus éloigné
+            print(i)
             noeuds_voisins=[]
             for nouveau_noeud in noeud_milieu.get_liste_noeuds_accessibles() :
                 noeuds_voisins.append(nouveau_noeud)
                 print("noeud voisin : ", nouveau_noeud.get_id())
             for noeud in noeuds_voisins :
+                print("noeud voisin testé :", noeud.get_id())
                 if not donnee_placee :
                     donnee_placee=placement_donnee(donnee_commune, noeud)
                 # on met à jour les nouveaux chemins pour accéder à la donnée :
+                # de cette façon, on peut vérifier que la donné ne vient pas se placer à un endroit plus avantageux pour un autre utilisateur
                 chemin_court=chemin_le_plus_court(noeud, utilisateur_pret)
                 chemin_long=chemin_le_plus_court(noeud, utilisateur_loin)
-                if donnee_placee:
+                print('taille du chemin court : ', len(chemin_court))
+                print('taille du chemin long : ', len(chemin_long))
+                chemin_minimiser=abs(len(chemin_1)-len(chemin_2))<=1
+                print('chemin minimiser ?', chemin_minimiser)
+                if donnee_placee and chemin_minimiser or len(chemin_court)>len(chemin_long):
                     break
-            if donnee_placee :
+            if donnee_placee and chemin_minimiser or len(chemin_court)>len(chemin_long):
                 break
         if not donnee_placee : #si on sort du while parce qu'aucune place convenait bien, on remet la donnée là où elle était
-            noeud_commun.ajouter_donnee(donnee_commune)
+            placement_donnee(donnee_commune, noeud_commun)
+            print("donnée commune : ", donnee_commune.get_id())
         print("\nLa donnée commune est à la place la mieux adaptée")
 
 def chemin_le_plus_court(noeud:Noeuds_systeme, utilisateur:Utilisateurs)->list[Noeuds_systeme]:
@@ -203,32 +229,40 @@ def chemin_le_plus_court(noeud:Noeuds_systeme, utilisateur:Utilisateurs)->list[N
         print("Le chemin entre le noeud ", noeud_direct.get_id(), " et le noeud ", noeud.get_id(), " est en passant par les noeuds", liste_id)
         return chemin_final
         
-def noeud_au_milieu(utilisateur1:Utilisateurs, utilisateur2:Utilisateurs):
+def noeud_au_milieu(utilisateur1:Utilisateurs, utilisateur2:Utilisateurs)->list[Noeuds_systeme]:
     """Fonction qui renvoie le noeud au milieu des deux utilisateurs """
     # on va commencer par calculer le chemin le plus court entre le noeud accessible de l'utilisateur 1 et l'utilisateur 2.
     noeud_direct_1=utilisateur1.get_noeud_direct()
-    chemin1=chemin_le_plus_court(noeud_direct_1, utilisateur2)
+    chemin1=chemin_le_plus_court(noeud_direct_1, utilisateur2) #chemin le plus court entre l'utilisateur le plus prêt de la donnée commune et l'utilisateur le plus éloigné
 
     # on va faire pareil en sens inverse
     noeud_direct_2=utilisateur2.get_noeud_direct()
-    chemin2=chemin_le_plus_court(noeud_direct_2, utilisateur1)
+    chemin2=chemin_le_plus_court(noeud_direct_2, utilisateur1) #chemin entre l'utilisateur éloigné et l'utilisateur proche de la donnée
 
     if len(chemin1)!=len(chemin2):
         print("bizarre")
     
     else : #on récupère le noeud au milieu du chemin1 (ça devrait être le même que celui du chemin2)
-        noeud_1=chemin1[len(chemin1)//2]
-        noeud_2=chemin1[len(chemin2)//2]
-        if noeud_1!=noeud_2 :
-            print("bizarre, les noeuds au milieu de sont pas identiques")
-        else :
-            return noeud_2
+        noeuds_1=[]
+        noeuds_2=[]
+        if len(chemin1)%2==0 : #si on a un nombre de noeud paire, on prend les deux noeuds d'avant et après le milieu
+            noeuds_1.append(chemin1[len(chemin1)//2])
+            noeuds_1.append(chemin1[len(chemin1)//2+1])
+            noeuds_2.append(chemin2[len(chemin2)//2-1])
+            noeuds_2.append(chemin2[len(chemin2)//2])
+        elif len(chemin1)%2!=0 : #si on a un nombre de noeud impaire, on peut prendre celui du milieu
+            noeuds_1.append(chemin1[len(chemin1)//2])
+            noeuds_2.append(chemin2[len(chemin2)//2])
+
+        for noeud in noeuds_1 :
+            print("noeuds voisins pour l'utilisateur prêt : ", noeud.get_id())
+        return noeuds_2 # on s'intéresse au chemin effectué par l'utilisateur le plus éloigné 
 
 def placement_donnee(donnee:Donnees, noeud:Noeuds_systeme)->bool:
     #si la donnée est déjà dans le noeud on essaie pas de la replacer dans ce noeud
     if donnee in noeud.get_liste_donnees():
         print("La donnée est déjà dans le noeud ", noeud.get_id())
-        
+
     # si le noeud a la capacité d'accueillir la donnée alors on la déplace.
     if noeud.get_capacite()>=donnee.get_taille():
         print("La donnée a été déplacée dans le noeud", noeud.get_id())
