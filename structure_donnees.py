@@ -264,14 +264,16 @@ noeud_6.ajouter_noeud_accessible(noeud_7) # le noeud 6 a accès au noeud 5 et au
 noeud_1=Noeuds_systeme(1, 10, [], [])
 noeud_2=Noeuds_systeme( 2, 50, [], [noeud_1])
 noeud_3=Noeuds_systeme(3, 40, [], [noeud_2]) # on change la taille du noeud du milieu
+noeud_4=Noeuds_systeme(4, 28, [], [noeud_3])
+noeud_5=Noeuds_systeme(5, 22, [], [noeud_4]) 
+noeud_6=Noeuds_systeme(6, 60, [], [noeud_5])
+noeud_7=Noeuds_systeme(7, 38, [], [noeud_6])
 noeud_1.ajouter_noeud_accessible(noeud_2) # le noeud 1 a accès et au noeud 2
 noeud_2.ajouter_noeud_accessible(noeud_3) # le noeud 2 a accès au noeud 1 et le noeud 3.
-noeud_4=Noeuds_systeme(4, 28, [], [noeud_3])
 noeud_3.ajouter_noeud_accessible(noeud_4) # le noeud 3 a accès au noeud 2 et au noeud 4
-noeud_5=Noeuds_systeme(5, 22, [], [noeud_4]) 
 noeud_4.ajouter_noeud_accessible(noeud_5) # le noeud 4 a accès au noeud 3 et au noeud 5
-noeud_6=Noeuds_systeme(6, 60, [], [noeud_5])
 noeud_5.ajouter_noeud_accessible(noeud_6) # le noeud 5 a accès au noeud 4 et au noeud 6
+noeud_6.ajouter_noeud_accessible(noeud_7) # le noeud 6 a accès au noeud 5 et au noeud 7
 """
 
 #Noeuds de façon à ce que la donnée commune soit déplacée dans un autre noeud (le 4):
@@ -279,14 +281,16 @@ noeud_5.ajouter_noeud_accessible(noeud_6) # le noeud 5 a accès au noeud 4 et au
 noeud_1=Noeuds_systeme(1, 10, [], [])
 noeud_2=Noeuds_systeme( 2, 50, [], [noeud_1])
 noeud_3=Noeuds_systeme(3, 30, [], [noeud_2])
+noeud_4=Noeuds_systeme(4, 38, [], [noeud_3])
+noeud_5=Noeuds_systeme(5, 22, [], [noeud_4]) 
+noeud_6=Noeuds_systeme(6, 60, [], [noeud_5])
+noeud_7=Noeuds_systeme(7, 38, [], [noeud_6])
 noeud_1.ajouter_noeud_accessible(noeud_2) # le noeud 1 a accès et au noeud 2
 noeud_2.ajouter_noeud_accessible(noeud_3) # le noeud 2 a accès au noeud 1 et le noeud 3.
-noeud_4=Noeuds_systeme(4, 38, [], [noeud_3])
 noeud_3.ajouter_noeud_accessible(noeud_4) # le noeud 3 a accès au noeud 2 et au noeud 4
-noeud_5=Noeuds_systeme(5, 22, [], [noeud_4]) 
 noeud_4.ajouter_noeud_accessible(noeud_5) # le noeud 4 a accès au noeud 3 et au noeud 5
-noeud_6=Noeuds_systeme(6, 60, [], [noeud_5])
 noeud_5.ajouter_noeud_accessible(noeud_6) # le noeud 5 a accès au noeud 4 et au noeud 6
+noeud_6.ajouter_noeud_accessible(noeud_7) # le noeud 6 a accès au noeud 5 et au noeud 7
 """
 
 # test placement de données

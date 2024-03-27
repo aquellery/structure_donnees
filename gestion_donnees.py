@@ -158,9 +158,9 @@ def placement_donnees_multi(liste_donnees:list[Donnees], liste_utilisateurs:list
         if len(noeuds_milieu)>1 and not donnee_placee: # si la donnée n'a pas pu être placée, on regarde si un deuxième noeud est considéré voisin (dans le cas d'une liste paire)
             donnee_placee=placement_donnee(donnee_commune, noeuds_milieu[1])
         i=0
-        while (not donnee_placee) and (not chemin_minimiser) and len(chemin_court)<len(chemin_long) and  i<len(chemin_court):
-            i+=1 # pour ne pas rentrer dans une boucle infernale, si après avoir parcouru tous les noeuds on ne peut pas déplacer la donnée alors on la laisse à sa place
-            # si on ne peut pas, on essaie de la rapprocher de l'utilisateur qui en était le plus éloigné
+        while (not donnee_placee) and (not chemin_minimiser) and i<len(chemin_court):
+            # si la donnée a été placée et que le chemin est minimiser on arrête de chercher un autre placement pour la donnée
+            i+=1 # pour éviter de rentrer dans une boucle infinie : si on a parcouru tous les noeuds mais que le chemin n'est pas minimisé ou que la donnée avait aucune autre place alors on sort de la boucle
             noeuds_voisins=[]
             for nouveau_noeud in noeud_milieu.get_liste_noeuds_accessibles() :
                 noeuds_voisins.append(nouveau_noeud)
@@ -171,12 +171,12 @@ def placement_donnees_multi(liste_donnees:list[Donnees], liste_utilisateurs:list
                 # de cette façon, on peut vérifier que la donné ne vient pas se placer à un endroit plus avantageux pour un autre utilisateur
                 chemin_court=chemin_le_plus_court(noeud, utilisateur_pret)
                 chemin_long=chemin_le_plus_court(noeud, utilisateur_loin)
-                chemin_minimiser=abs(len(chemin_1)-len(chemin_2))<=1
-                if donnee_placee and chemin_minimiser or len(chemin_court)>len(chemin_long):
+                chemin_minimiser=abs(len(chemin_court)-len(chemin_long))<=1
+                if donnee_placee and chemin_minimiser :#or len(chemin_court)>len(chemin_long):
                     break
-            if donnee_placee and chemin_minimiser or len(chemin_court)>len(chemin_long):
+            if donnee_placee and chemin_minimiser :#or len(chemin_court)>len(chemin_long):
                 break
-        if not donnee_placee : #si on sort du while parce qu'aucune place convenait bien, on remet la donnée là où elle était
+        if not donnee_placee and not chemin_minimiser: #si on sort du while parce qu'aucune place convenait bien, on remet la donnée là où elle était
             placement_donnee(donnee_commune, noeud_commun)
         print("\nLa donnée commune est à la place la mieux adaptée")
 
