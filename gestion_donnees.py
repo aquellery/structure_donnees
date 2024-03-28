@@ -212,16 +212,16 @@ def chemin_le_plus_court(noeud:Noeuds_systeme, utilisateur:Utilisateurs)->list[N
     if len(chemins_possibles)!=0:
         chemin_final:list[Noeuds_systeme]=min(chemins_possibles, key=len)
         chemin_final.append(noeud)
-        # en cas de boucle de noeud, le chemin va prendre le noeud qui a la plus grande capacité
+        # en cas de boucle de noeud, le chemin va garder prendre le noeud qui a la plus grande capacité
         for noeud1 in chemin_final :
             for noeud2 in chemin_final :
-                if set(noeud1.get_liste_noeuds_accessibles()).issubset(set(noeud2.get_liste_noeuds_accessibles())):
-                    if noeud1.get_capacite()<noeud2.get_capacite():
-                        noeud_a_enlever=noeud1
-                    else :
-                        noeud_a_enlever=noeud2
-                    chemin_final.remove(noeud_a_enlever)
-        
+                if noeud1.get_id()!=noeud2.get_id():
+                    if set(noeud1.get_liste_noeuds_accessibles()).issubset(set(noeud2.get_liste_noeuds_accessibles())):
+                        if noeud1.get_capacite()<noeud2.get_capacite():
+                            noeud_a_enlever=noeud1
+                        else :
+                            noeud_a_enlever=noeud2
+                        chemin_final.remove(noeud_a_enlever)        
         liste_id=[noeud.get_id() for noeud in chemin_final]
         print("Le chemin entre le noeud ", noeud_direct.get_id(), " et le noeud ", noeud.get_id(), " est en passant par les noeuds", liste_id)
         return chemin_final
