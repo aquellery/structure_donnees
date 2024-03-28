@@ -221,10 +221,15 @@ def chemin_le_plus_court(noeud:Noeuds_systeme, utilisateur:Utilisateurs)->list[N
                             noeud_a_enlever=noeud1
                         else :
                             noeud_a_enlever=noeud2
-                        chemin_final.remove(noeud_a_enlever)        
-        liste_id=[noeud.get_id() for noeud in chemin_final]
+                        liste_id=[noeud.get_id() for noeud in chemin_final]
+                        print("liste avant suppresison : ", liste_id)
+                        chemin_final.remove(noeud_a_enlever)
+
+        #on remet les noeuds dans le bon sens                
+        chemin_trie=sorted(chemin_final, key=lambda n: n.get_id())
+        liste_id=[noeud.get_id() for noeud in chemin_trie]
         print("Le chemin entre le noeud ", noeud_direct.get_id(), " et le noeud ", noeud.get_id(), " est en passant par les noeuds", liste_id)
-        return chemin_final
+        return chemin_trie
 
  ####### GPT #######
 def chemin_le_plus_court_gptt(noeud: Noeuds_systeme, utilisateur: Utilisateurs) -> list[Noeuds_systeme]:

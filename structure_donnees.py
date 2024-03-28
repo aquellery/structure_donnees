@@ -297,8 +297,8 @@ noeud_6.ajouter_noeud_accessible(noeud_7) # le noeud 6 a accès au noeud 5 et au
 noeud_1=Noeuds_systeme(1, 10, [], [])
 noeud_2=Noeuds_systeme( 2, 50, [], [noeud_1])
 noeud_3=Noeuds_systeme(3, 30, [], [noeud_2])
-noeud_4=Noeuds_systeme(4, 38, [], [noeud_3])
-noeud_5=Noeuds_systeme(5, 22, [], [noeud_3]) 
+noeud_4=Noeuds_systeme(4, 28, [], [noeud_3])
+noeud_5=Noeuds_systeme(5, 52, [], [noeud_3]) 
 noeud_6=Noeuds_systeme(6, 60, [], [noeud_4, noeud_5])
 noeud_7=Noeuds_systeme(7, 38, [], [noeud_6])
 noeud_1.ajouter_noeud_accessible(noeud_2) # le noeud 1 a accès et au noeud 2
