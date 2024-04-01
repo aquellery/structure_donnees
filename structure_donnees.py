@@ -224,8 +224,11 @@ def toStringDonneesNoeuds(liste_noeuds:list[Noeuds_systeme])-> str :
 
 ####################################################################################
 ####################################################################################
+#                      ZONE DE CREATION DES OBJETS                                 #
+####################################################################################
+####################################################################################
 
-### zone de test : création de données, de noeuds et d'utilisateurs ###
+# création de données, de noeuds et d'utilisateurs ###
 vtt=Donnees(id=1, taille=5)
 route=Donnees(id=2, taille=4)
 chat=Donnees(id=3, taille=30)

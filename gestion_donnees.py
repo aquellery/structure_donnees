@@ -228,58 +228,14 @@ def chemin_le_plus_court(noeud:Noeuds_systeme, utilisateur:Utilisateurs)->list[N
         #on remet les noeuds dans le bon sens
         id_d=chemin_final[0].get_id()
         id_a=chemin_final[-1].get_id()
-        if id_d<id_a :   # noeuds par ordre d'id croissant             
+        if id_d<=id_a : # noeuds par ordre d'id croissant             
             chemin_trie=sorted(chemin_final, key=lambda n: n.get_id())
         else : # noeuds par ordre d'id décroissants
             chemin_trie=sorted(chemin_final, key=lambda n: n.get_id(), reverse=True)
         liste_id=[noeud.get_id() for noeud in chemin_trie]
         print("Le chemin entre le noeud ", noeud_direct.get_id(), " et le noeud ", noeud.get_id(), " est en passant par les noeuds", liste_id)
         return chemin_trie
-
- ####### GPT #######
-def chemin_le_plus_court_gptt(noeud: Noeuds_systeme, utilisateur: Utilisateurs) -> list[Noeuds_systeme]:
-    """Fonction récursive qui permet de trouver le chemin le plus court entre un nœud et un utilisateur"""
-
-    noeud_direct = utilisateur.get_noeud_direct()
-
-    def chemin_entre_deux_noeuds(noeud_visite: Noeuds_systeme, noeud_destination: Noeuds_systeme, liste_visite: list[Noeuds_systeme], chemin_actuel: list[Noeuds_systeme]) -> list[Noeuds_systeme]:
-        # Ajouter le nœud visité à la liste des nœuds visités
-        liste_visite.append(noeud_visite)
-        
-        # Si le nœud visité est le nœud de destination, retourner le chemin actuel
-        if noeud_visite.get_id() == noeud_destination.get_id():
-            return chemin_actuel + [noeud_destination]
-        
-        # Initialiser une liste pour stocker les chemins possibles
-        chemins_possibles = []
-        
-        # Parcourir les nœuds voisins du nœud visité
-        for noeud_voisin in noeud_visite.get_liste_noeuds_accessibles():
-            # Vérifier si le nœud voisin n'a pas été visité précédemment pour éviter les boucles infinies
-            if noeud_voisin not in liste_visite:
-                # Explorer récursivement le chemin entre le nœud voisin et le nœud de destination
-                nouveau_chemin = chemin_entre_deux_noeuds(noeud_voisin, noeud_destination, liste_visite.copy(), chemin_actuel + [noeud_visite])
-                nouveau_chemin = chemin_entre_deux_noeuds(noeud_voisin, noeud_destination, liste_visite.copy(), chemin_actuel + [noeud_visite])
-                if nouveau_chemin:
-                    chemins_possibles.append(nouveau_chemin)
-        
-        # Retourner le chemin le plus court parmi les chemins possibles
-        if chemins_possibles:
-            return min(chemins_possibles, key=len)
-        else:
-            return None
-
-    # Appeler la fonction récursive pour trouver le chemin le plus court entre le nœud direct et le nœud de destination
-    chemin_final = chemin_entre_deux_noeuds(noeud_direct, noeud, [], [])
     
-    # Vérifier si un chemin a été trouvé
-    if chemin_final:
-        liste_id = [noeud.get_id() for noeud in chemin_final]
-        print("Le chemin entre le nœud", noeud_direct.get_id(), "et le nœud", noeud.get_id(), "est en passant par les nœuds", liste_id)
-        return chemin_final
-    else:
-        raise ValueError("Il n'y a pas de chemin possible")
-        
 def noeud_au_milieu(utilisateur1:Utilisateurs, utilisateur2:Utilisateurs)->list[Noeuds_systeme]:
     """Fonction qui renvoie le noeud au milieu des deux utilisateurs """
     # on va commencer par calculer le chemin le plus court entre le noeud accessible de l'utilisateur 1 et l'utilisateur 2.
