@@ -226,7 +226,6 @@ def chemin_le_plus_court(noeud:Noeuds_systeme, utilisateur:Utilisateurs)->list[N
                         else :
                             noeud_a_enlever=noeud2
                         liste_id=[noeud.get_id() for noeud in chemin_final]
-                        print("liste avant suppresison : ", liste_id)
                         chemin_final.remove(noeud_a_enlever)
 
         #on remet les noeuds dans le bon sens
@@ -265,8 +264,6 @@ def noeud_au_milieu(utilisateur1:Utilisateurs, utilisateur2:Utilisateurs)->list[
             noeuds_1.append(chemin1[len(chemin1)//2])
             noeuds_2.append(chemin2[len(chemin2)//2])
 
-        for noeud in noeuds_1 :
-            print("noeuds voisins pour l'utilisateur prêt : ", noeud.get_id())
         return noeuds_2 # on s'intéresse au chemin effectué par l'utilisateur le plus éloigné 
 
 def placement_donnee(donnee:Donnees, noeud:Noeuds_systeme)->bool:
