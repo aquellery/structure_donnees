@@ -81,12 +81,14 @@ def placement_donnees_multi(liste_donnees:list[Donnees], liste_utilisateurs:list
     donnees_2=utilisateur2.get_liste_interet()
 
     # on fait la liste de tous les noeuds accessibles par les utilisateurs : 
+    """
     liste_noeuds=[]
     for utilisateur in liste_utilisateurs:
         noeuds=utilisateur.get_liste_noeuds_accessible()
         for noeud in noeuds :
             if noeud not in liste_noeuds :
                 liste_noeuds.append(noeud)
+    """
 
     # on récupère les données communes :
     """

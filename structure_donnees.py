@@ -317,7 +317,7 @@ gillian=Utilisateurs(1, [vtt, route, pluie, vent], noeud_1)
 emma=Utilisateurs(2, [chat, chien, soleil], noeud_7)
 
 # test placement de données avec intéret commun
-#gillian.ajouter_donnee_interet(soleil)
+gillian.ajouter_donnee_interet(soleil)
 
 print("Donnée vtt : "+ vtt.toString())
 print("Donnée route : "+route.toString())
